@@ -27,8 +27,7 @@ st.write("Headers", headers)
 st.write("Total Rows", total_rows)
 
 
-"""
-# fig = plt.figure(figsize=(15,6))
+"""fig = plt.figure(figsize=(15,6))
 df.boxplot()
 plt.show()
 
@@ -84,7 +83,7 @@ plt.scatter(df_pca[:, 0], df_pca[:, 1], c=kmeans.labels_, cmap="viridis")
 plt.xlabel("First Principal Component")
 plt.ylabel("Second Principal Component")
 plt.title(f"K-means Clustering (K={n_clusters})")
-plt.show() """
+plt.show()"""
 
 
 
