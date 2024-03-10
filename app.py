@@ -10,11 +10,6 @@ import streamlit as st
 from io import StringIO
 
 
-
-df = pd.read_csv("penguins.csv")
-df.head(5)
-print("Hello World")
-
 st.title("Penguin Species Classification")
 spectra = st.file_uploader("upload file", type={"csv", "txt"})
 if spectra is not None:
