@@ -7,6 +7,7 @@ from sklearn.svm import SVC
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.cluster import KMeans
 from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
 
 class ClassificationModels:
     def __init__(self, X, y):
@@ -67,3 +68,11 @@ class ClassificationModels:
         y_pred = model.predict(self.X_test)
         accuracy = accuracy_score(self.y_test, y_pred)
         return accuracy
+    
+    def evaluate_classification_report(self,model):
+        y_pred = model.predict(self.X_test)
+        return classification_report(self.y_test, y_pred, output_dict=True)
+    
+    def predict_output(self, model):
+        y_pred = model.predict(self.X_test)
+        return y_pred

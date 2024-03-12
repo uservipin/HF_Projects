@@ -59,9 +59,6 @@ def main():
     if choice == "Classification":
 
         st.title("Classification")
-          # Generate unique key for each file uploader
-        
-        
         spectra = st.file_uploader("upload file", type={"csv", "txt"})
         st.write("Waiting for file upload...")
         status =True
@@ -86,10 +83,15 @@ def main():
         st.write("Headers", headers)
         st.write("Total Rows", total_rows)
 
-
         option = st.selectbox(
             'Select the output columns', headers)
         st.write('Output column is :', option)
+        
+        status1 = True
+        while status1:
+            if option is not None:
+                status1 = False
+        
 
         y = spectra_df[option] 
         X= spectra_df.drop(option, axis=1)
@@ -120,6 +122,18 @@ def main():
         svm_accuracy = clf.evaluate_model(svm_model)
         knn_accuracy = clf.evaluate_model(knn_model)
 
+        # Evaluate classification model
+        naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
+        logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
+        decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
+        random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
+        svm_classification_report = clf.evaluate_classification_report(svm_model)
+        knn_classification_report = clf.evaluate_classification_report(knn_model)
+
+        # Display the model prediction
+
+        # st.write("Naive Bayes Model Prediction:", clf.predict_model(naive_bayes_model)) 
+
         # Display the accuracies
         st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
         st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
@@ -127,6 +141,22 @@ def main():
         st.write("Random Forests Accuracy:", random_forests_accuracy)
         st.write("Support Vector Machines Accuracy:", svm_accuracy)
         st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
+
+        # Display classification reports
+        st.write("Naive Bayes Classification Report:", naive_bayes_classification_report)
+        st.write("Logistic Regression Classification Report:", logistic_regression_classification_report)
+        st.write("Decision Tree Classification Report:", decision_tree_classification_report)
+        st.write("Random Forests Classification Report:", random_forest_classification_report)
+        st.write("Support Vector Machines Classification Report:", svm_classification_report)
+        st.write("K-Nearest Neighbors Classification Report:", knn_classification_report)
+        
+
+
+        
+
+
+
+
         
     elif choice == "Regressor":
         regressor()
