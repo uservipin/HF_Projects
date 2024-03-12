@@ -11,7 +11,7 @@ from io import StringIO
 from classification import ClassificationModels
 
 warnings.filterwarnings("ignore")
-
+import uuid
 
 
 # data cleaning: https://bank-performance.streamlit.app/
@@ -59,10 +59,24 @@ def main():
     if choice == "Classification":
 
         st.title("Classification")
+          # Generate unique key for each file uploader
+        
+        
         spectra = st.file_uploader("upload file", type={"csv", "txt"})
-        if spectra is not None:
-            # print("Spectra", spectra)
-            spectra_df = pd.read_csv(spectra)
+        st.write("Waiting for file upload...")
+        status =True
+        while status:
+            # st.write("Waiting for file upload...")
+            # spectra = st.file_uploader("upload file", type={"csv", "txt"})
+            if spectra is not None:
+                status = False
+
+        # if spectra is None: 
+        #     # print("Spectra", spectra)
+        #     st.write("Waiting for file upload...")
+        #     # spectra = st.file_uploader("Upload File", key=file_uploader_key)
+
+        spectra_df = pd.read_csv(spectra)
         st.write(spectra_df.head(5))
 
         # dataset 
@@ -81,8 +95,8 @@ def main():
         X= spectra_df.drop(option, axis=1)
 
 
-        st.write("X",X )
-        st.write("y", y)
+        st.write("X",X.head(5) )
+        st.write("y", y.head(5))
 
 
         clf = ClassificationModels(X,y)
