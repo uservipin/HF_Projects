@@ -15,6 +15,7 @@ import uuid
 
 
 # data cleaning: https://bank-performance.streamlit.app/
+# https://docs.streamlit.io/library/api-reference/layout
 
 
 # Define function for each page
@@ -150,19 +151,19 @@ def main():
                     st.write("Selected Models type:", len(selected_models))
 
                     # Toggle to add hyperparameters
-                    add_hyperparameters = st.checkbox("Add Hyperparameters")
+                    add_hyperparameters = st.toggle("Add Hyperparameters")
 
                     # If hyperparameters should be added
                     if add_hyperparameters:
-                        # For each selected model, create a space for hyperparameters
                         for model in selected_models:
                             st.write(f"Hyperparameters for {model}:")
-                            # Here you can add text inputs, sliders, or any other widgets to input hyperparameters
-
-
-        
-
-
+                            # If Decision Tree is selected, show hyperparameters for Decision Tree
+                            if model == "decision_tree":
+                                max_depth = st.slider("Max Depth", min_value=1, max_value=20, value=5)
+                                criterion = st.selectbox("Criterion", ["gini", "entropy"])
+                                # You can add more hyperparameters as needed
+                                st.write("Selected Max Depth:", max_depth)
+                                st.write("Selected Criterion:", criterion)
 
 
         
