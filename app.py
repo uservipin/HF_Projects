@@ -53,103 +53,111 @@ def resume():
 # Main function to run the app
 def main():
     st.sidebar.title("Navigation")
-    page_options = ["Classification", "Regressor", "NLP", "Image","Voice","Video","LLMs"]
+    page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
     choice = st.sidebar.radio("Go to", page_options)
 
     if choice == "Classification":
-
         st.title("Classification")
-        spectra = st.file_uploader("upload file", type={"csv", "txt"})
-        st.write("Waiting for file upload...")
-        status =True
-        while status:
-            # st.write("Waiting for file upload...")
-            # spectra = st.file_uploader("upload file", type={"csv", "txt"})
-            if spectra is not None:
-                status = False
-
-        # if spectra is None: 
-        #     # print("Spectra", spectra)
-        #     st.write("Waiting for file upload...")
-        #     # spectra = st.file_uploader("Upload File", key=file_uploader_key)
-
-        spectra_df = pd.read_csv(spectra)
-        st.write(spectra_df.head(5))
-
-        # dataset 
-        headers = spectra_df.columns.tolist()
-        total_rows = spectra_df.shape[0]
-
-        st.write("Headers", headers)
-        st.write("Total Rows", total_rows)
-
-        option = st.selectbox(
-            'Select the output columns', headers)
-        st.write('Output column is :', option)
+        spectra = st.file_uploader("Upload file", type={"csv", "txt"})
         
-        status1 = True
-        while status1:
-            if option is not None:
-                status1 = False
-        
+        if spectra is not None:
+            spectra_df = pd.read_csv(spectra)
+            
+            st.write(spectra_df.head(5))
+            st.write("Headers", spectra_df.columns.tolist())
+            st.write("Total Rows", spectra_df.shape[0])
 
-        y = spectra_df[option] 
-        X= spectra_df.drop(option, axis=1)
+            option = st.text_input("Enter your text here:")
+            if option:
+                st.write("You entered:", option)
+
+                y = spectra_df[option] 
+                X= spectra_df.drop(option, axis=1)
+
+                st.write("X",X.head(5) )
+                st.write("y", y.head(5))
 
 
-        st.write("X",X.head(5) )
-        st.write("y", y.head(5))
+                clf = ClassificationModels(X,y)
 
+                # Split the data
+                clf.split_data()
 
-        clf = ClassificationModels(X,y)
+                # Train the models
+                naive_bayes_model = clf.naive_bayes_classifier()
+                logistic_regression_model = clf.logistic_regression()
+                decision_tree_model = clf.decision_tree()
+                random_forests_model = clf.random_forests()
+                svm_model = clf.support_vector_machines()
+                knn_model = clf.k_nearest_neighbour()
 
-        # Split the data
-        clf.split_data()
+                # Evaluate the models
+                naive_bayes_accuracy = clf.evaluate_model(naive_bayes_model)
+                logistic_regression_accuracy = clf.evaluate_model(logistic_regression_model)
+                decision_tree_accuracy = clf.evaluate_model(decision_tree_model)
+                random_forests_accuracy = clf.evaluate_model(random_forests_model)
+                svm_accuracy = clf.evaluate_model(svm_model)
+                knn_accuracy = clf.evaluate_model(knn_model)
 
-        # Train the models
-        naive_bayes_model = clf.naive_bayes_classifier()
-        logistic_regression_model = clf.logistic_regression()
-        decision_tree_model = clf.decision_tree()
-        random_forests_model = clf.random_forests()
-        svm_model = clf.support_vector_machines()
-        knn_model = clf.k_nearest_neighbour()
+                # Evaluate classification model
+                naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
+                logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
+                decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
+                random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
+                svm_classification_report = clf.evaluate_classification_report(svm_model)
+                knn_classification_report = clf.evaluate_classification_report(knn_model)
 
-        # Evaluate the models
-        naive_bayes_accuracy = clf.evaluate_model(naive_bayes_model)
-        logistic_regression_accuracy = clf.evaluate_model(logistic_regression_model)
-        decision_tree_accuracy = clf.evaluate_model(decision_tree_model)
-        random_forests_accuracy = clf.evaluate_model(random_forests_model)
-        svm_accuracy = clf.evaluate_model(svm_model)
-        knn_accuracy = clf.evaluate_model(knn_model)
+                # Display the model prediction
 
-        # Evaluate classification model
-        naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
-        logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
-        decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
-        random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
-        svm_classification_report = clf.evaluate_classification_report(svm_model)
-        knn_classification_report = clf.evaluate_classification_report(knn_model)
+                # st.write("Naive Bayes Model Prediction:", clf.predict_model(naive_bayes_model)) 
 
-        # Display the model prediction
+                # Display the accuracies
+                st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
+                st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
+                st.write("Decision Tree Accuracy:", decision_tree_accuracy)
+                st.write("Random Forests Accuracy:", random_forests_accuracy)
+                st.write("Support Vector Machines Accuracy:", svm_accuracy)
+                st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
 
-        # st.write("Naive Bayes Model Prediction:", clf.predict_model(naive_bayes_model)) 
+                # Display classification reports
+                st.write("Naive Bayes Classification Report:", pd.DataFrame(naive_bayes_classification_report))
+                st.write("Logistic Regression Classification Report:", pd.DataFrame(logistic_regression_classification_report))
+                st.write("Decision Tree Classification Report:", pd.DataFrame(decision_tree_classification_report))
+                st.write("Random Forests Classification Report:", pd.DataFrame(random_forest_classification_report))
+                st.write("Support Vector Machines Classification Report:", pd.DataFrame(svm_classification_report))
+                st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
 
-        # Display the accuracies
-        st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
-        st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
-        st.write("Decision Tree Accuracy:", decision_tree_accuracy)
-        st.write("Random Forests Accuracy:", random_forests_accuracy)
-        st.write("Support Vector Machines Accuracy:", svm_accuracy)
-        st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
+                # Display the confusion matrix
 
-        # Display classification reports
-        st.write("Naive Bayes Classification Report:", naive_bayes_classification_report)
-        st.write("Logistic Regression Classification Report:", logistic_regression_classification_report)
-        st.write("Decision Tree Classification Report:", decision_tree_classification_report)
-        st.write("Random Forests Classification Report:", random_forest_classification_report)
-        st.write("Support Vector Machines Classification Report:", svm_classification_report)
-        st.write("K-Nearest Neighbors Classification Report:", knn_classification_report)
-        
+                    # Add a multiple selection dropdown
+                
+                list_of_classifier_models = [
+                                                "naive_bayes_classifier",
+                                                "logistic_regression",
+                                                "decision_tree",
+                                                "random_forests",
+                                                "support_vector_machines",
+                                                "k_nearest_neighbour",
+                                                "k_means_clustering"
+                                                ]
+
+                selected_models = st.multiselect("Select Models",list_of_classifier_models)
+
+                # Execute further code based on selected models
+                if selected_models:
+                    # Further code execution based on selected models
+                    st.write("Selected Models:", selected_models)
+                    st.write("Selected Models type:", len(selected_models))
+
+                    # Toggle to add hyperparameters
+                    add_hyperparameters = st.checkbox("Add Hyperparameters")
+
+                    # If hyperparameters should be added
+                    if add_hyperparameters:
+                        # For each selected model, create a space for hyperparameters
+                        for model in selected_models:
+                            st.write(f"Hyperparameters for {model}:")
+                            # Here you can add text inputs, sliders, or any other widgets to input hyperparameters
 
 
         

@@ -19,6 +19,7 @@ class ClassificationModels:
             self.X, self.y, test_size=test_size, random_state=random_state
         )
 
+
     def naive_bayes_classifier(self):
         model = GaussianNB()
         model.fit(self.X_train, self.y_train)
@@ -58,6 +59,7 @@ class ClassificationModels:
             model = GridSearchCV(model, params, cv=5)
         model.fit(self.X_train, self.y_train)
         return model
+
 
     def k_means_clustering(self, n_clusters):
         model = KMeans(n_clusters=n_clusters)
