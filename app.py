@@ -120,6 +120,50 @@ def main():
                     st.write("Selected Models:", selected_models)
                     # st.write("Selected Models type:", len(selected_models))
 
+                # Toggle to add hyperparameters
+                add_hyperparameters = st.toggle("Add Hyperparameters")
+
+                # If hyperparameters should be added
+                if add_hyperparameters:
+                    for model in selected_models:
+                        st.write(f"Hyperparameters for {model}:")
+                        # If Decision Tree is selected, show hyperparameters for Decision Tree
+                        if model == "decision_tree":
+                            max_depth = st.slider("Max Depth", min_value=1, max_value=20, value=5)
+                            criterion = st.selectbox("Criterion", ["gini", "entropy"])
+                            # You can add more hyperparameters as needed
+                            st.write("Selected Max Depth:", max_depth)
+                            st.write("Selected Criterion:", criterion)
+
+
+
+                    num_containers = 3  # Change this to the desired number of containers
+
+                    # Create a list to store the columns
+                     
+
+                    # Create dynamic number of columns
+                    columns = st.columns(num_containers)
+           
+                    # Add content to each column
+                    for i, col in enumerate(columns):
+                        with col:
+                            if i == 0:
+                                st.header("A cat")
+                                st.image("https://static.streamlit.io/examples/cat.jpg")
+                            elif i == 1:
+                                st.header("A dog")
+                                st.image("https://static.streamlit.io/examples/dog.jpg")
+                            elif i == 2:
+                                st.header("An owl")
+                                st.image("https://static.streamlit.io/examples/owl.jpg")
+                            # Add more conditions or modify based on your needs for additional containers
+
+
+
+
+
+
                 for models in selected_models:
                     if models == "Naive Bayes Classifier":
                         naive_bayes_model = clf.naive_bayes_classifier()
@@ -172,20 +216,7 @@ def main():
                         st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
                         st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
 
-                # Toggle to add hyperparameters
-                add_hyperparameters = st.toggle("Add Hyperparameters")
 
-                # If hyperparameters should be added
-                if add_hyperparameters:
-                    for model in selected_models:
-                        st.write(f"Hyperparameters for {model}:")
-                        # If Decision Tree is selected, show hyperparameters for Decision Tree
-                        if model == "decision_tree":
-                            max_depth = st.slider("Max Depth", min_value=1, max_value=20, value=5)
-                            criterion = st.selectbox("Criterion", ["gini", "entropy"])
-                            # You can add more hyperparameters as needed
-                            st.write("Selected Max Depth:", max_depth)
-                            st.write("Selected Criterion:", criterion)
 
                 
 
@@ -257,66 +288,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-
-
-# fig = plt.figure(figsize=(15,6))
-# df.boxplot()
-# plt.show()
-
-# df1 = df[~((df['flipper_length_mm']>4000) | (df['flipper_length_mm']<0)) ]
-# df1
-
-
-
-# df2 = pd.get_dummies(df1).drop("sex_.", axis=1)
-# df2
-
-# # perform preprocessing steps on the dataset - scaling
-
-# scalar = StandardScaler()
-
-# X = scalar.fit_transform(df2)
-
-
-# df_preprocessed = pd.DataFrame(data=X, columns=df2.columns)
-# df_preprocessed
-
-# import numpy as np
-# df_preprocessed = df_preprocessed.replace(np.nan, 0)
-
-# # apply PCA 
-
-# pca = PCA(n_components= None)
-
-# dfx_pca = pca.fit(df_preprocessed)
-# dfx_pca.explained_variance_ratio_
-# n_components = sum(dfx_pca.explained_variance_ratio_>0.1)
-# print("Components :", n_components)
-# pca = PCA(n_components= n_components)
-# df_pca = pca.fit_transform(df_preprocessed)
-
-# dfx_pca.explained_variance_ratio_
-
-
-# inertia = []
-# for k in range(1, 10):
-#     kmeans = KMeans(n_clusters=k, random_state=42).fit(df_preprocessed)
-#     inertia.append(kmeans.inertia_)
-# plt.plot(range(1, 10), inertia, marker="o")
-# plt.xlabel("Number of clusters")
-# plt.ylabel("Inertia")
-# plt.title("Elbow Method")
-# plt.show()
-# n_clusters = 4
-
-# n_clusters = 4
-# kmeans = KMeans(n_clusters=n_clusters, random_state=42).fit(df_preprocessed)
-# plt.scatter(df_pca[:, 0], df_pca[:, 1], c=kmeans.labels_, cmap="viridis")
-# plt.xlabel("First Principal Component")
-# plt.ylabel("Second Principal Component")
-# plt.title(f"K-means Clustering (K={n_clusters})")
-# plt.show()"""
-
-
 
