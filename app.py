@@ -123,83 +123,122 @@ def main():
                 # Toggle to add hyperparameters
                 add_hyperparameters = st.toggle("Add Hyperparameters")
 
+                models_hyperparameters = {
+                    "Naive Bayes Classifier": [],
+                    "Logistic Regression": ["C", "max_iter"],
+                    "Decision Tree": ["max_depth", "criterion"],
+                    "Random Forests": ["n_estimators", "max_depth", "criterion"],
+                    "SVM": ["C", "kernel"],
+                    "KNN": ["n_neighbors", "algorithm"],
+                    "K-Means Clustering": ["n_clusters", "init"]
+                }
+
                 # If hyperparameters should be added
                 if add_hyperparameters:
-                    for model in selected_models:
-                        st.write(f"Hyperparameters for {model}:")
-                        # If Decision Tree is selected, show hyperparameters for Decision Tree
-                        if model == "decision_tree":
-                            max_depth = st.slider("Max Depth", min_value=1, max_value=20, value=5)
-                            criterion = st.selectbox("Criterion", ["gini", "entropy"])
-                            # You can add more hyperparameters as needed
-                            st.write("Selected Max Depth:", max_depth)
-                            st.write("Selected Criterion:", criterion)
+                    num_models = len(selected_models)
+                    max_items_per_row = 4
+                    num_rows = (num_models + max_items_per_row - 1) // max_items_per_row  # Calculate number of rows
+
+                    #Dictionary to store selected hyperparameters for each model
+
+                    hyperparameters_values = {}
+
+                    for row in range(num_rows):
+                        cols = st.columns(min(num_models - row * max_items_per_row, max_items_per_row))  # Calculate number of columns for this row
+                        for i, col in enumerate(cols):
+                            model_index = row * max_items_per_row + i
+                            with col:
+                                if model_index < num_models:
+
+                                    selected_model = selected_models[model_index]
+                                    st.write(f"Selected Model: {selected_model}")  # Display selected model name
+                   
+                                    # initializing 
+                                    if selected_model not in hyperparameters_values:
+                                        hyperparameters_values[selected_model] = {}
+
+                                    # selected_model = st.selectbox(f"Select Model {row}-{i}", selected_models, index=model_index)
+                                    selected_hyperparameters = models_hyperparameters[selected_models[model_index]]
 
 
-
-                    num_containers = 3  # Change this to the desired number of containers
-
-                    # Create a list to store the columns
-                     
-
-                    # Create dynamic number of columns
-                    columns = st.columns(num_containers)
-           
-                    # Add content to each column
-                    for i, col in enumerate(columns):
-                        with col:
-                            if i == 0:
-                                st.header("A cat")
-                                st.image("https://static.streamlit.io/examples/cat.jpg")
-                            elif i == 1:
-                                st.header("A dog")
-                                st.image("https://static.streamlit.io/examples/dog.jpg")
-                            elif i == 2:
-                                st.header("An owl")
-                                st.image("https://static.streamlit.io/examples/owl.jpg")
-                            # Add more conditions or modify based on your needs for additional containers
-
-
-
-
-
+                                    for hyperparameter in selected_hyperparameters:
+                                        if hyperparameter == "max_depth":
+                                            max_depth = st.slider(f"Max Depth {selected_model} {hyperparameter}", min_value=1, max_value=20, value=5)
+                                            hyperparameters_values[selected_model][hyperparameter] = max_depth
+                                            st.write("Selected Max Depth:", max_depth)
+                                        elif hyperparameter == "criterion":
+                                            criterion = st.selectbox(f"Criterion {selected_model} {hyperparameter}", ["gini", "entropy"])
+                                            hyperparameters_values[selected_model][hyperparameter] = criterion
+                                            st.write("Selected Criterion:", criterion)
+                                        elif hyperparameter == "C":
+                                            C = st.slider(f"C {selected_model} {hyperparameter}", min_value=0.01, max_value=10.0, value=1.0)
+                                            hyperparameters_values[selected_model][hyperparameter] = C
+                                            st.write("Selected C:", C)
+                                        elif hyperparameter == "max_iter":
+                                            max_iter = st.slider(f"Max Iterations {selected_model} {hyperparameter}", min_value=100, max_value=10000, step=100, value=1000)
+                                            hyperparameters_values[selected_model][hyperparameter] = max_iter
+                                            st.write("Selected Max Iterations:", max_iter)
+                                        elif hyperparameter == "n_estimators":
+                                            n_estimators = st.slider(f"Number of Estimators {selected_model} {hyperparameter}", min_value=1, max_value=100, value=10)
+                                            hyperparameters_values[selected_model][hyperparameter] = n_estimators
+                                            st.write("Selected Number of Estimators:", n_estimators)
+                                        elif hyperparameter == "kernel":
+                                            kernel = st.selectbox(f"Kernel {selected_model} {hyperparameter}", ["linear", "poly", "rbf", "sigmoid"])
+                                            hyperparameters_values[selected_model][hyperparameter] = kernel
+                                            st.write("Selected Kernel:", kernel)
+                                        elif hyperparameter == "n_neighbors":
+                                            n_neighbors = st.slider(f"Number of Neighbors {selected_model} {hyperparameter}", min_value=1, max_value=50, value=5)
+                                            hyperparameters_values[selected_model][hyperparameter] = n_neighbors
+                                            st.write("Selected Number of Neighbors:", n_neighbors)
+                                        elif hyperparameter == "algorithm":
+                                            algorithm = st.selectbox(f"Algorithm {selected_model} {hyperparameter}", ["auto", "ball_tree", "kd_tree", "brute"])
+                                            hyperparameters_values[selected_model][hyperparameter] = algorithm
+                                            st.write("Selected Algorithm:", algorithm)
+                                        elif hyperparameter == "n_clusters":
+                                            n_clusters = st.slider(f"Number of Clusters {selected_model} {hyperparameter}", min_value=2, max_value=20, value=5)
+                                            hyperparameters_values[selected_model][hyperparameter] = n_clusters
+                                            st.write("Selected Number of Clusters:", n_clusters)
+                                        elif hyperparameter == "init":
+                                            init = st.selectbox(f"Initialization Method {selected_model} {hyperparameter}", ["k-means++", "random"])
+                                            hyperparameters_values[selected_model][hyperparameter] = init
+                                            st.write("Selected Initialization Method:", init)                                        # Add more hyperparameters as needed for each model
+                    st.write("Hyperparameters:", hyperparameters_values)    
 
                 for models in selected_models:
                     if models == "Naive Bayes Classifier":
                         naive_bayes_model = clf.naive_bayes_classifier()
                         naive_bayes_accuracy = clf.evaluate_model(naive_bayes_model)
                         naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
-                        st.write("Naive Bayes Classification Report:", pd.DataFrame(naive_bayes_classification_report))
                         st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
-                    
+                        # st.write("Naive Bayes Classification Report:", pd.DataFrame(naive_bayes_classification_report))
                     if models == "Logistic Regression":
                         
                         logistic_regression_model = clf.logistic_regression()
                         logistic_regression_accuracy = clf.evaluate_model(logistic_regression_model)
                         logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
                         st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
-                        st.write("Logistic Regression Classification Report:", pd.DataFrame(logistic_regression_classification_report))
+                        # st.write("Logistic Regression Classification Report:", pd.DataFrame(logistic_regression_classification_report))
 
                     if models == "Decision Tree":
                         decision_tree_model = clf.decision_tree()
                         decision_tree_accuracy = clf.evaluate_model(decision_tree_model)
                         decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
                         st.write("Decision Tree Accuracy:", decision_tree_accuracy)
-                        st.write("Decision Tree Classification Report:", pd.DataFrame(decision_tree_classification_report))
+                        # st.write("Decision Tree Classification Report:", pd.DataFrame(decision_tree_classification_report))
 
                     if models == "Random Forests":
                         random_forests_model = clf.random_forests()
                         random_forests_accuracy = clf.evaluate_model(random_forests_model)
                         random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
                         st.write("Random Forests Accuracy:", random_forests_accuracy)
-                        st.write("Random Forests Classification Report:", pd.DataFrame(random_forest_classification_report))
+                        # st.write("Random Forests Classification Report:", pd.DataFrame(random_forest_classification_report))
 
                     if models == "SVM":
                         svm_model = clf.support_vector_machines()
                         svm_accuracy = clf.evaluate_model(svm_model)
                         svm_classification_report = clf.evaluate_classification_report(svm_model)
                         st.write("Support Vector Machines Accuracy:", svm_accuracy)
-                        st.write("Support Vector Machines Classification Report:", pd.DataFrame(svm_classification_report))
+                        # st.write("Support Vector Machines Classification Report:", pd.DataFrame(svm_classification_report))
 
                         
                     if models == "KNN":
@@ -207,68 +246,17 @@ def main():
                         knn_accuracy = clf.evaluate_model(knn_model)
                         knn_classification_report = clf.evaluate_classification_report(knn_model)
                         st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
-                        st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
+                        # st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
                     
                     if models == "K- Means Clustering":
                         knn_model = clf.k_means_clustering()
                         knn_accuracy = clf.evaluate_model(knn_model)
                         knn_classification_report = clf.evaluate_classification_report(knn_model)
                         st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
-                        st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
+                        # st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
 
 
 
-                
-
-                # # Train the models
-                # naive_bayes_model = clf.naive_bayes_classifier()
-                # logistic_regression_model = clf.logistic_regression()
-                # decision_tree_model = clf.decision_tree()
-                # random_forests_model = clf.random_forests()
-                # svm_model = clf.support_vector_machines()
-                
-
-                # # Evaluate the models
-                # naive_bayes_accuracy = clf.evaluate_model(naive_bayes_model)
-                # logistic_regression_accuracy = clf.evaluate_model(logistic_regression_model)
-                # decision_tree_accuracy = clf.evaluate_model(decision_tree_model)
-                # random_forests_accuracy = clf.evaluate_model(random_forests_model)
-                # svm_accuracy = clf.evaluate_model(svm_model)
-                # knn_accuracy = clf.evaluate_model(knn_model)
-
-                # # Evaluate classification model
-                # naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
-                # logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
-                # decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
-                # random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
-                # svm_classification_report = clf.evaluate_classification_report(svm_model)
-                # knn_classification_report = clf.evaluate_classification_report(knn_model)
-
-                # # Display the model prediction
-
-                # # st.write("Naive Bayes Model Prediction:", clf.predict_model(naive_bayes_model)) 
-
-                # # Display the accuracies
-                # st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
-                # st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
-                # st.write("Decision Tree Accuracy:", decision_tree_accuracy)
-                # st.write("Random Forests Accuracy:", random_forests_accuracy)
-                # st.write("Support Vector Machines Accuracy:", svm_accuracy)
-                # st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
-
-                # # Display classification reports
-                # st.write("Naive Bayes Classification Report:", pd.DataFrame(naive_bayes_classification_report))
-                # st.write("Logistic Regression Classification Report:", pd.DataFrame(logistic_regression_classification_report))
-                # st.write("Decision Tree Classification Report:", pd.DataFrame(decision_tree_classification_report))
-                # st.write("Random Forests Classification Report:", pd.DataFrame(random_forest_classification_report))
-                # st.write("Support Vector Machines Classification Report:", pd.DataFrame(svm_classification_report))
-                # st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
-
-                # Display the confusion matrix
-
-
-
-        
     elif choice == "Regressor":
         regressor()
     elif choice == "NLP":
