@@ -93,13 +93,6 @@ def main():
                 # st.write("X",X.head(5) )
                 # st.write("y", y.head(5))
 
-
-                clf = ClassificationModels(X,y)
-
-                # Split the data
-                clf.split_data()
-                # select model to perform classification
-
                 # Add a multiple selection dropdown
                 
                 list_of_classifier_models = [
@@ -202,60 +195,101 @@ def main():
                                             init = st.selectbox(f"Initialization Method {selected_model} {hyperparameter}", ["k-means++", "random"])
                                             hyperparameters_values[selected_model][hyperparameter] = init
                                             st.write("Selected Initialization Method:", init)                                        # Add more hyperparameters as needed for each model
-                    st.write("Hyperparameters:", hyperparameters_values)    
+                    # st.write("Hyperparameters:", hyperparameters_values)    
+                
+                
+                    clf = ClassificationModels(X,y,hyperparameters_values)
+                    # model_accuracy = {}
+                    # Split the data
+                    clf.split_data()
+
+
+                accuracy_dict= {}
 
                 for models in selected_models:
+
+                    model_hyperparameters = hyperparameters_values.get(models, {})  # Get selected hyperparameters for this model
+                    
+                    if models not in accuracy_dict:
+                        accuracy_dict[models] = 0
+
+                    # st.write("trained param",trained_models)
+                    # for model_name in model_hyperparameters
+                    
+
+
                     if models == "Naive Bayes Classifier":
-                        naive_bayes_model = clf.naive_bayes_classifier()
+                        naive_bayes_model = clf.naive_bayes_classifier(model_hyperparameters)
                         naive_bayes_accuracy = clf.evaluate_model(naive_bayes_model)
-                        naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
+                        # naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
                         st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
+                        accuracy_dict[models] = naive_bayes_accuracy
                         # st.write("Naive Bayes Classification Report:", pd.DataFrame(naive_bayes_classification_report))
                     if models == "Logistic Regression":
-                        
-                        logistic_regression_model = clf.logistic_regression()
+                        # st.write("Logistic Regression Model:", model_hyperparameters)
+                        logistic_regression_model = clf.logistic_regression(model_hyperparameters)
                         logistic_regression_accuracy = clf.evaluate_model(logistic_regression_model)
-                        logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
+                        # logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
                         st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
+                        accuracy_dict[models] = logistic_regression_accuracy
                         # st.write("Logistic Regression Classification Report:", pd.DataFrame(logistic_regression_classification_report))
 
                     if models == "Decision Tree":
-                        decision_tree_model = clf.decision_tree()
+                        decision_tree_model = clf.decision_tree(model_hyperparameters)
                         decision_tree_accuracy = clf.evaluate_model(decision_tree_model)
-                        decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
+                        # decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
                         st.write("Decision Tree Accuracy:", decision_tree_accuracy)
+                        accuracy_dict[models] = decision_tree_accuracy
                         # st.write("Decision Tree Classification Report:", pd.DataFrame(decision_tree_classification_report))
 
                     if models == "Random Forests":
-                        random_forests_model = clf.random_forests()
+                        random_forests_model = clf.random_forests(model_hyperparameters)
                         random_forests_accuracy = clf.evaluate_model(random_forests_model)
-                        random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
+                        accuracy_dict[models] = random_forests_accuracy
+                        # random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
                         st.write("Random Forests Accuracy:", random_forests_accuracy)
                         # st.write("Random Forests Classification Report:", pd.DataFrame(random_forest_classification_report))
 
                     if models == "SVM":
-                        svm_model = clf.support_vector_machines()
+                        svm_model = clf.support_vector_machines(model_hyperparameters)
                         svm_accuracy = clf.evaluate_model(svm_model)
-                        svm_classification_report = clf.evaluate_classification_report(svm_model)
+                        accuracy_dict[models] = svm_accuracy
+                        # svm_classification_report = clf.evaluate_classification_report(svm_model)
                         st.write("Support Vector Machines Accuracy:", svm_accuracy)
                         # st.write("Support Vector Machines Classification Report:", pd.DataFrame(svm_classification_report))
 
                         
                     if models == "KNN":
-                        knn_model = clf.k_nearest_neighbour()
+                        knn_model = clf.k_nearest_neighbour(model_hyperparameters)
                         knn_accuracy = clf.evaluate_model(knn_model)
-                        knn_classification_report = clf.evaluate_classification_report(knn_model)
+                        accuracy_dict[models] = knn_accuracy
+                        # knn_classification_report = clf.evaluate_classification_report(knn_model)
                         st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
                         # st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
                     
                     if models == "K- Means Clustering":
-                        knn_model = clf.k_means_clustering()
-                        knn_accuracy = clf.evaluate_model(knn_model)
-                        knn_classification_report = clf.evaluate_classification_report(knn_model)
-                        st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
+                        kmeans_model = clf.k_means_clustering(model_hyperparameters)
+                        kmeans_accuracy = clf.evaluate_model(kmeans_model)
+                        accuracy_dict[models] = kmeans_accuracy
+                        # knn_classification_report = clf.evaluate_classification_report(knn_model)
+                        st.write("K-Nearest Neighbors Accuracy:", kmeans_accuracy)
                         # st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
 
 
+                st.write("Model Accuracy:", accuracy_dict)
+                max_key = ''
+                max_value = 0
+                for i in accuracy_dict:
+                    if accuracy_dict[i] > max_value:
+                        max_key = i
+                        max_value = accuracy_dict[i]
+
+                        st.write("Efficient Model:",max_key, accuracy_dict[max_key])
+
+                        ## add test model button and redirect to test page
+                        if st.button("Test Model", type= 'primary'):
+                            st.write("Redirecting to test page...")
+                            # st.experimental_rerun()
 
     elif choice == "Regressor":
         regressor()
@@ -276,4 +310,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
