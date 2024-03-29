@@ -1,18 +1,15 @@
 
 import pandas as pd
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
-from sklearn.cluster import  KMeans
-from sklearn.preprocessing import  StandardScaler
 import warnings
 import streamlit as st
-from io import StringIO
-from sklearn.linear_model import LogisticRegression
-from sklearn.tree import DecisionTreeClassifier
+
 from classification import ClassificationModels
+from regression import RegressionModels 
+
 warnings.filterwarnings("ignore")
 import uuid
 import time
+
 
 
 # data cleaning: https://bank-performance.streamlit.app/
@@ -25,10 +22,10 @@ import time
 #     st.write("Welcome to the Home Page")
 
 def regressor():
-    train, test = st.tabs(['Train','Test'])
+    EDA, train, test = st.tabs(['EDA/Transformation','Train','Test'])
 
     with train:
-            st.title("Regression/Train data")
+            st.title("Regression / Train data")
             spectra = st.file_uploader("**Upload file**", type={"csv", "txt"})
             
             if spectra is not None:
@@ -64,6 +61,50 @@ def regressor():
 
                     st.divider()
 
+                    # Select models
+                    # models_list = [
+                    #     'Linear Regression', 'Polynomial Regression', 'Ridge Regression',
+                    #     'Lasso Regression', 'ElasticNet Regression', 'Logistic Regression',
+                    #     'Decision Tree Regression', 'Random Forest Regression',
+                    #     'Gradient Boosting Regression', 'Support Vector Regression (SVR)',
+                    #     'XGBoost', 'LightGBM'
+                    # ]
+
+                    models_list = [
+                                   'Linear Regression',
+                                    'Polynomial Regression',
+                                    'Ridge Regression',
+                                    'Lasso Regression',
+                                    'ElasticNet Regression',
+                                    'Logistic Regression',
+                                    'Decision Tree Regression',
+                                    'Random Forest Regression',
+                                    'Gradient Boosting Regression',
+                                    'Support Vector Regression (SVR)',
+                                    'XGBoost',
+                                    'LightGBM'
+                                    ]
+
+                    selected_models = st.multiselect('Select Regression Models', models_list)
+
+                    if selected_models:
+                        # Initialize RegressionModels class
+                        models = RegressionModels()
+                        
+                        # Add data
+                        models.add_data(X, y)
+                        
+                        # Split data into training and testing sets
+                        models.split_data()
+
+                        # Train and evaluate selected models
+                        for model_name in selected_models:
+                            st.subheader(f"Model: {model_name}")
+                            models.fit(model_name)
+                            y_pred = models.train(model_name)
+                            mse, r2 = models.evaluate(model_name)
+                            st.write(f"MSE: {mse}")
+                            st.write(f"R-squared: {r2}")
 
 def NLP():
     st.title("Contact Page")
@@ -93,7 +134,8 @@ def resume():
 # Main function to run the app
 def main():
     st.sidebar.title("Deep Learning/ Data Science/ AI Models")
-    page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
+    # page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
+    page_options = ["Classification", "Regressor", "NLP", "LLMs",  "AI"]
     choice = st.sidebar.radio("Select", page_options)
 
     if choice == "Classification":
