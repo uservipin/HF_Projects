@@ -277,7 +277,6 @@ def main():
                                     st.write("Efficient Model:",max_key, accuracy_dict[max_key])
                                     st.write("Go to test tab")
     
-        
         with test:        
                 spectra_1 = st.file_uploader("Upload file test the model", type={"csv", "txt"})
 
@@ -338,6 +337,14 @@ def main():
                     if max_key == "K- Means Clustering":
                         kmeans_model =kmeans_model.predict(X)
                         st.write("K-Means Clustering Model:", kmeans_model)
+
+                    data_frame = pd.DataFrame(X).to_csv().encode('utf-8')
+                    st.download_button(
+                        label="Download data as CSV",
+                        data=data_frame,
+                        file_name='large_df.csv',
+                        mime='text/csv',
+                    )
 
     elif choice == "Regressor":
         regressor()
