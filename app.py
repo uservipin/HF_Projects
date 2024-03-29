@@ -55,27 +55,31 @@ def resume():
 
 # Main function to run the app
 def main():
-    st.sidebar.title("Navigation")
+    st.sidebar.title("Deep Learning/ Data Science/ AI Models")
     page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
-    choice = st.sidebar.radio("Go to", page_options)
+    choice = st.sidebar.radio("Select", page_options)
 
     if choice == "Classification":
         train, test = st.tabs(['Train','Test'])
 
         with train:
             st.title("Classification / Train data")
-            spectra = st.file_uploader("Upload file", type={"csv", "txt"})
+            spectra = st.file_uploader("**Upload file**", type={"csv", "txt"})
             
             if spectra is not None:
                 spectra_df = pd.read_csv(spectra)
                 
                 st.write(spectra_df.head(5))
                 # st.write("Headers", spectra_df.columns.tolist())
-                st.write("Total Rows", spectra_df.shape[0])
+                st.write("**Total Rows**", spectra_df.shape[0])
 
-                option = st.text_input("Enter your text here:")
+                st.divider()
+
+                option = st.text_input("**Select Output Column**:")
+                st.divider()
+
                 if option:
-                    st.write("You have selected output column: ", option)
+                    st.write("**You have selected output column**: ", option)
 
                     y = spectra_df[option] 
                     X= spectra_df.drop(option, axis=1)
@@ -85,13 +89,15 @@ def main():
 
                     # Add content to col1
                     with col1:
-                        st.subheader("Train data excluding output")
+                        st.write("Train data excluding output")
                         st.write(X.head(5))
 
                     # Add content to col2
                     with col2:
-                        st.subheader("Output")
+                        st.write("Output")
                         st.write(y.head(5))
+
+                    st.divider()
                     
                     list_of_classifier_models = [
                                                     "Naive Bayes Classifier",
@@ -113,11 +119,11 @@ def main():
                                                 "K-Means Clustering": ["n_clusters", "init"]
                     }
 
-                    selected_models = st.multiselect("Select Models",list_of_classifier_models)
+                    selected_models = st.multiselect("**Select Models**:",list_of_classifier_models)
 
                     # Execute further code based on selected models
                     if selected_models:
-                        st.write("Selected Models:", selected_models)
+                        # st.write("Selected Models:", selected_models)
 
                         # Toggle to add hyperparameters
                         add_hyperparameters = st.toggle("Add Hyperparameters")
@@ -213,7 +219,7 @@ def main():
                                     naive_bayes_model = clf.naive_bayes_classifier(model_hyperparameters)
                                     naive_bayes_accuracy = clf.evaluate_model(naive_bayes_model)
                                     # naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
-                                    st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
+                                    # st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
                                     accuracy_dict[models] = naive_bayes_accuracy
                                     # st.write("Naive Bayes Classification Report:", pd.DataFrame(naive_bayes_classification_report))
                                 if models == "Logistic Regression":
@@ -221,7 +227,7 @@ def main():
                                     logistic_regression_model = clf.logistic_regression(model_hyperparameters)
                                     logistic_regression_accuracy = clf.evaluate_model(logistic_regression_model)
                                     # logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
-                                    st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
+                                    # st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
                                     accuracy_dict[models] = logistic_regression_accuracy
                                     # st.write("Logistic Regression Classification Report:", pd.DataFrame(logistic_regression_classification_report))
 
@@ -229,7 +235,7 @@ def main():
                                     decision_tree_model = clf.decision_tree(model_hyperparameters)
                                     decision_tree_accuracy = clf.evaluate_model(decision_tree_model)
                                     # decision_tree_classification_report = clf.evaluate_classification_report(decision_tree_model)
-                                    st.write("Decision Tree Accuracy:", decision_tree_accuracy)
+                                    # st.write("Decision Tree Accuracy:", decision_tree_accuracy)
                                     accuracy_dict[models] = decision_tree_accuracy
                                     # st.write("Decision Tree Classification Report:", pd.DataFrame(decision_tree_classification_report))
 
@@ -238,7 +244,7 @@ def main():
                                     random_forests_accuracy = clf.evaluate_model(random_forests_model)
                                     accuracy_dict[models] = random_forests_accuracy
                                     # random_forest_classification_report = clf.evaluate_classification_report(random_forests_model)
-                                    st.write("Random Forests Accuracy:", random_forests_accuracy)
+                                    # st.write("Random Forests Accuracy:", random_forests_accuracy)
                                     # st.write("Random Forests Classification Report:", pd.DataFrame(random_forest_classification_report))
 
                                 if models == "SVM":
@@ -246,7 +252,7 @@ def main():
                                     svm_accuracy = clf.evaluate_model(svm_model)
                                     accuracy_dict[models] = svm_accuracy
                                     # svm_classification_report = clf.evaluate_classification_report(svm_model)
-                                    st.write("Support Vector Machines Accuracy:", svm_accuracy)
+                                    # st.write("Support Vector Machines Accuracy:", svm_accuracy)
                                     # st.write("Support Vector Machines Classification Report:", pd.DataFrame(svm_classification_report))
 
                                     
@@ -255,7 +261,7 @@ def main():
                                     knn_accuracy = clf.evaluate_model(knn_model)
                                     accuracy_dict[models] = knn_accuracy
                                     # knn_classification_report = clf.evaluate_classification_report(knn_model)
-                                    st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
+                                    # st.write("K-Nearest Neighbors Accuracy:", knn_accuracy)
                                     # st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
                                 
                                 if models == "K- Means Clustering":
@@ -263,10 +269,11 @@ def main():
                                     kmeans_accuracy = clf.evaluate_model(kmeans_model)
                                     accuracy_dict[models] = kmeans_accuracy
                                     # knn_classification_report = clf.evaluate_classification_report(knn_model)
-                                    st.write("K-Nearest Neighbors Accuracy:", kmeans_accuracy)
+                                    # st.write("K-Nearest Neighbors Accuracy:", kmeans_accuracy)
                                     # st.write("K-Nearest Neighbors Classification Report:", pd.DataFrame(knn_classification_report))
                             
-                            st.write("Model Accuracy:", accuracy_dict)
+                            st.divider()
+                            st.write("Models Accuracy:", accuracy_dict)
                             max_key = ''
                             max_value = 0
                             for i in accuracy_dict:
@@ -274,10 +281,12 @@ def main():
                                     max_key = i
                                     max_value = accuracy_dict[i]
                         
-                                    st.write("Efficient Model:",max_key, accuracy_dict[max_key])
-                                    st.write("Go to test tab")
+                            st.write("Efficient Model is :",max_key, accuracy_dict[max_key])
+                            st.divider()
+                            st.write("Scroll up and Click on <**Test**> tab to test Model performance")
     
-        with test:        
+        with test: 
+                st.title("Classification / Test")       
                 spectra_1 = st.file_uploader("Upload file test the model", type={"csv", "txt"})
 
                 if spectra_1 is not None:
@@ -285,7 +294,7 @@ def main():
                     Actual = spectra_df1['Disease']
                     spectra_df1 = spectra_df1.drop(columns=['Disease'])
                     st.write(spectra_df1.head(5))
-
+                    st.divider()
 
                     model_dict ={
                                 "Naive Bayes Classifier":'GaussianNB()',
@@ -338,6 +347,8 @@ def main():
                         kmeans_model =kmeans_model.predict(X)
                         st.write("K-Means Clustering Model:", kmeans_model)
 
+                    st.divider()
+
                     data_frame = pd.DataFrame(X).to_csv().encode('utf-8')
                     st.download_button(
                         label="Download data as CSV",
@@ -345,6 +356,8 @@ def main():
                         file_name='large_df.csv',
                         mime='text/csv',
                     )
+
+                    st.divider()
 
     elif choice == "Regressor":
         regressor()
