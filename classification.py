@@ -10,7 +10,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
 
 class ClassificationModels:
-    def __init__(self, X, y,hyperparameters=None):
+    def __init__(self, X, y= None,hyperparameters=None):
         self.X = X
         self.y = y
         self.hyperparameters = hyperparameters
@@ -21,7 +21,7 @@ class ClassificationModels:
         )
 
 
-    def naive_bayes_classifier(self):
+    def naive_bayes_classifier(self, param = None):
         model = GaussianNB()
         model.fit(self.X_train, self.y_train)
         return model
