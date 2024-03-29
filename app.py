@@ -25,8 +25,45 @@ import time
 #     st.write("Welcome to the Home Page")
 
 def regressor():
-    st.title("About Page")
-    st.write("This is the About Page")
+    train, test = st.tabs(['Train','Test'])
+
+    with train:
+            st.title("Regression/Train data")
+            spectra = st.file_uploader("**Upload file**", type={"csv", "txt"})
+            
+            if spectra is not None:
+                spectra_df = pd.read_csv(spectra)
+                
+                st.write(spectra_df.head(5))
+                # st.write("Headers", spectra_df.columns.tolist())
+                st.write("**Total Rows**", spectra_df.shape[0])
+
+                st.divider()
+
+                option = st.text_input("**Select Output Column**:")
+                st.divider()
+
+                if option:
+                    st.write("**You have selected output column**: ", option)
+
+                    y = spectra_df[option] 
+                    X= spectra_df.drop(option, axis=1)
+
+                                        # Define the columns with your content
+                    col1, col2 = st.columns([4,1], gap="small")
+
+                    # Add content to col1
+                    with col1:
+                        st.write("Train data excluding output")
+                        st.write(X.head(5))
+
+                    # Add content to col2
+                    with col2:
+                        st.write("Output")
+                        st.write(y.head(5))
+
+                    st.divider()
+
 
 def NLP():
     st.title("Contact Page")
