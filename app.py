@@ -135,7 +135,7 @@ def resume():
 def main():
     st.sidebar.title("Deep Learning/ Data Science/ AI Models")
     # page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
-    page_options = ["Classification", "Regressor", "NLP", "LLMs",  "AI"]
+    page_options = ["Classification", "Regressor", "NLP", "LLMs",  "AI","Deep Learning"]
     choice = st.sidebar.radio("Select", page_options)
 
     if choice == "Classification":
