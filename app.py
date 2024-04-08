@@ -1,17 +1,49 @@
 
 import pandas as pd
 import warnings
-import streamlit as st
-
+import streamlit as s
 from classification import ClassificationModels
 from regression import RegressionModels 
-
 warnings.filterwarnings("ignore")
 import uuid
 import time
+import os
+import pathlib
+import textwrap
+import google.generativeai as genai
+from dotenv import load_dotenv
 
 
+load_dotenv()  # take environment variables from .env.
 
+
+os.getenv("GOOGLE_API_KEY")
+genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+
+## Function to load OpenAI model and get respones
+model = genai.GenerativeModel('gemini-pro')
+chat = model.start_chat(history=[])
+
+def get_gemini_response(question):
+    response =chat.send_message(question,stream=True)
+    return response
+
+def gemini_model():
+    ##initialize our streamlit app
+    # st.set_page_config(page_title="Q&A Demo")
+    st.header("Gemini Application")
+    input=st.text_input("Input: ",key="input")
+    submit=st.button("Ask the question")
+    ## If ask button is clicked
+    if submit:
+        response=get_gemini_response(input)
+        st.subheader("The Response is")
+        for chunk in response:
+            print(st.write(chunk.text))
+            print("_"*80)
+        
+        # st.write(chat.history)
 # data cleaning: https://bank-performance.streamlit.app/
 # https://docs.streamlit.io/library/api-reference/layout
 
@@ -107,8 +139,17 @@ def regressor():
                             st.write(f"R-squared: {r2}")
 
 def NLP():
-    st.title("Contact Page")
-    st.write("You can reach us at example@example.com")
+    Gemini, Bert, = st.tabs(['Gemini','Bert'])
+
+    with Gemini:
+            st.title("Chat with Gemini Pro")
+            gemini_model()
+
+
+    with Bert:
+            st.title("Question answering module using Bert model,will add this module soon")
+
+
 
 def Image():
     st.title("Home Page")
