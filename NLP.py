@@ -1,6 +1,6 @@
 # Use a pipeline as a high-level helper
 from transformers import pipeline
-print("Hello world")
+print("Hello World")
 pipe = pipeline("translation", model="facebook/nllb-200-distilled-600M")
 
 from transformers import AutoTokenizer, M2M100ForConditionalGeneration
