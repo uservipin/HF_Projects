@@ -13,6 +13,7 @@ import textwrap
 import google.generativeai as genai
 from dotenv import load_dotenv
 
+from PIL import Image
 
 load_dotenv()  # take environment variables from .env.
 os.getenv("GOOGLE_API_KEY")
