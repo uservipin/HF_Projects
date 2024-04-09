@@ -1,7 +1,7 @@
 
 import pandas as pd
 import warnings
-import streamlit as s
+import streamlit as st
 from classification import ClassificationModels
 from regression import RegressionModels 
 warnings.filterwarnings("ignore")
@@ -15,20 +15,29 @@ from dotenv import load_dotenv
 
 
 load_dotenv()  # take environment variables from .env.
-
-
 os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
+## Function to load OpenAI model and get respones
+model_chat = genai.GenerativeModel('gemini-pro')
+chat = model_chat.start_chat(history=[])
 
 ## Function to load OpenAI model and get respones
-model = genai.GenerativeModel('gemini-pro')
-chat = model.start_chat(history=[])
+model_vision = genai.GenerativeModel('gemini-pro-vision')
 
 def get_gemini_response(question):
     response =chat.send_message(question,stream=True)
     return response
 
+## Function to load OpenAI model and get respones
+
+def get_gemini_response_vision(input,image):
+    if input!="":
+       response = model_vision.generate_content([input,image])
+    else:
+       response = model_vision.generate_content(image)
+    return response.text
+  
 def gemini_model():
     ##initialize our streamlit app
     # st.set_page_config(page_title="Q&A Demo")
@@ -139,16 +148,31 @@ def regressor():
                             st.write(f"R-squared: {r2}")
 
 def NLP():
-    Gemini, Bert, = st.tabs(['Gemini','Bert'])
+    Gemini_Chat,Gemini_Vision, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision','Bert'])
 
-    with Gemini:
+    with Gemini_Chat:
             st.title("Chat with Gemini Pro")
             gemini_model()
 
+    with Gemini_Vision:
+        #initialize our streamlit app
+        #st.set_page_config(page_title="Gemini Image Demo")
+        st.header("Gemini Application")
+        input=st.text_input("Input Prompt: ",key="input")
+        uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+        image=""   
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            st.image(image, caption="Uploaded Image.", use_column_width=True)
+        submit=st.button("Tell me about the image")
+        ## If ask button is clicked
+        if submit:
+            response=get_gemini_response_vision(input,image)
+            st.subheader("The Response is")
+            st.write(response)
 
     with Bert:
-            st.title("Question answering module using Bert model,will add this module soon")
-
+            st.title(" Bert model will available soon")
 
 
 def Image():
@@ -167,6 +191,10 @@ def LLMs():
     st.title("About Page")
     st.write("This is the About Page")
 
+def AI():
+    st.title("About Page")
+    st.write("This is the About AI")
+
 def resume():
     st.title("Contact Page")
     st.write("You can reach us at example@example.com")
@@ -174,9 +202,10 @@ def resume():
 
 # Main function to run the app
 def main():
+
     st.sidebar.title("Deep Learning/ Data Science/ AI Models")
     # page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
-    page_options = ["Classification", "Regressor", "NLP", "LLMs",  "AI","Deep Learning"]
+    page_options = ["NLP","AI","Classification", "Regressor","Deep Learning"]
     choice = st.sidebar.radio("Select", page_options)
 
     if choice == "Classification":
@@ -490,8 +519,8 @@ def main():
     if choice == "Voice":
         Voice()
 
-    if choice == "Video":
-        Video()
+    if choice == "AI":
+        AI()
     
     if choice == "LLMs": 
         LLMs()
