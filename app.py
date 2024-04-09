@@ -8,11 +8,11 @@ warnings.filterwarnings("ignore")
 import uuid
 import time
 import os
+import io
 import pathlib
 import textwrap
 import google.generativeai as genai
 from dotenv import load_dotenv
-
 from PIL import Image
 
 load_dotenv()  # take environment variables from .env.
@@ -165,6 +165,8 @@ def NLP():
 
         if uploaded_file is not None:
             image = Image.open(uploaded_file)
+            #image = Image.open(io.BytesIO(uploaded_file.read()))
+
             st.image(image, caption="Uploaded Image.", use_column_width=True) 
        
         submit=st.button("Tell me about the image")
@@ -176,11 +178,6 @@ def NLP():
 
     with Bert:
             st.title(" Bert model will available soon")
-
-
-def Image():
-    st.title("Home Page")
-    st.write("Welcome to the Home Page")
 
 def Voice():
     st.title("Home Page")
