@@ -63,7 +63,13 @@ class Resume:
     def display_information(self):
         st.header("About: ")
         st.write("Data Science professional with over 3+ years of hands-on experience specializing in data analysis, data visualization, and the development and implementation of Data Science/Machine Learning/AI models.Currently, dedicated to the role of a Fraud detection Data Scientist, leveraging advanced statistical and ML, AI techniques.")
-
+        st.write("")
+        st.write("----------------------------")
+        st.write("LinkedIn [link](https://www.linkedin.com/in/vipin-/)")
+        st.write("GitHub [link](https://github.com/uservipin)")
+        st.write("Web Project Source Code [link](https://github.com/uservipin/HF_Projects)")
+        st.write("Data Science Projects [link](https://github.com/uservipin/data_science)")
+        st.write("Python Projects [link](https://github.com/uservipin/python)")
     def display_work_experience(self):
         st.header("Work Experience")
         with st.expander("**Enhancing Customer Experience and Operational Efficiency through NLP Techniques**"):
