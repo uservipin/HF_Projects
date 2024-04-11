@@ -1,9 +1,10 @@
+from classification import ClassificationModels
+from regression import RegressionModels 
+from resume import Resume
 
 import pandas as pd
 import warnings
 import streamlit as st
-from classification import ClassificationModels
-from regression import RegressionModels 
 warnings.filterwarnings("ignore")
 import uuid
 import time
@@ -192,12 +193,29 @@ def LLMs():
     st.write("This is the About Page")
 
 def AI():
-    st.title("About Page")
-    st.write("This is the About AI")
+    st.title("Need to add models")
+    #st.write("This is the About AI")
 
 def resume():
-    st.title("Contact Page")
-    st.write("You can reach us at example@example.com")
+    st.title("Resume")
+    st.write("")
+    About, Work_Experience,Skills_Tools, Education_Certification = st.tabs(["About", "Work Experience","Skills & Tools", "Education & Certificates"])
+
+    with About:
+        Resume().display_information()
+    
+    with Work_Experience:
+        Resume().display_work_experience()
+
+    with Skills_Tools:
+        Resume().skills_tools()
+    
+    with Education_Certification:
+        Resume().display_education_certificate()
+
+
+
+
 
 
 # Main function to run the app
@@ -205,7 +223,7 @@ def main():
 
     st.sidebar.title("Deep Learning/ Data Science/ AI Models")
     # page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
-    page_options = ["NLP","AI","Classification", "Regressor","Deep Learning"]
+    page_options = ["NLP","AI","Classification", "Regressor","Deep Learning", "Resume"]
     choice = st.sidebar.radio("Select", page_options)
 
     if choice == "Classification":
@@ -524,6 +542,8 @@ def main():
     
     if choice == "LLMs": 
         LLMs()
+    if choice == 'Resume':
+        resume()
 
 if __name__ == "__main__":
     main()
