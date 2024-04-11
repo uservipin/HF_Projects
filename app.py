@@ -215,9 +215,6 @@ def resume():
 
 
 
-
-
-
 # Main function to run the app
 def main():
 
