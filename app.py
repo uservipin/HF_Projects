@@ -2,23 +2,36 @@ from classification import ClassificationModels
 from regression import RegressionModels 
 from resume import Resume
 
+from sklearn.impute import SimpleImputer
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder, StandardScaler
+
+
 import pandas as pd
 import warnings
 import streamlit as st
-warnings.filterwarnings("ignore")
 import uuid
 import time
 import os
 import io
 import pathlib
 import textwrap
+
 import google.generativeai as genai
 from dotenv import load_dotenv
 from PIL import Image
+warnings.filterwarnings("ignore")
+
+# data cleaning: https://bank-performance.streamlit.app/
+# https://docs.streamlit.io/library/api-reference/layout
+
 
 load_dotenv()  # take environment variables from .env.
 os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+
+
 
 ## Function to load OpenAI model and get respones
 model_chat = genai.GenerativeModel('gemini-pro')
@@ -39,7 +52,7 @@ def get_gemini_response_vision(input,image):
     else:
        response = model_vision.generate_content(image)
     return response.text
-  
+
 def gemini_model():
     ##initialize our streamlit app
     # st.set_page_config(page_title="Q&A Demo")
@@ -55,175 +68,10 @@ def gemini_model():
             print("_"*80)
         
         # st.write(chat.history)
-# data cleaning: https://bank-performance.streamlit.app/
-# https://docs.streamlit.io/library/api-reference/layout
-
 
 # Define function for each page
-# def classification():
-#     st.title("Home Page")
-#     st.write("Welcome to the Home Page")
 
-def regressor():
-    EDA, train, test = st.tabs(['EDA/Transformation','Train','Test'])
-
-    with train:
-            st.title("Regression / Train data")
-            spectra = st.file_uploader("**Upload file**", type={"csv", "txt"})
-            
-            if spectra is not None:
-                spectra_df = pd.read_csv(spectra)
-                
-                st.write(spectra_df.head(5))
-                # st.write("Headers", spectra_df.columns.tolist())
-                st.write("**Total Rows**", spectra_df.shape[0])
-
-                st.divider()
-
-                option = st.text_input("**Select Output Column**:")
-                st.divider()
-
-                if option:
-                    st.write("**You have selected output column**: ", option)
-
-                    y = spectra_df[option] 
-                    X= spectra_df.drop(option, axis=1)
-
-                                        # Define the columns with your content
-                    col1, col2 = st.columns([4,1], gap="small")
-
-                    # Add content to col1
-                    with col1:
-                        st.write("Train data excluding output")
-                        st.write(X.head(5))
-
-                    # Add content to col2
-                    with col2:
-                        st.write("Output")
-                        st.write(y.head(5))
-
-                    st.divider()
-
-                    # Select models
-                    # models_list = [
-                    #     'Linear Regression', 'Polynomial Regression', 'Ridge Regression',
-                    #     'Lasso Regression', 'ElasticNet Regression', 'Logistic Regression',
-                    #     'Decision Tree Regression', 'Random Forest Regression',
-                    #     'Gradient Boosting Regression', 'Support Vector Regression (SVR)',
-                    #     'XGBoost', 'LightGBM'
-                    # ]
-
-                    models_list = [
-                                   'Linear Regression',
-                                    'Polynomial Regression',
-                                    'Ridge Regression',
-                                    'Lasso Regression',
-                                    'ElasticNet Regression',
-                                    'Logistic Regression',
-                                    'Decision Tree Regression',
-                                    'Random Forest Regression',
-                                    'Gradient Boosting Regression',
-                                    'Support Vector Regression (SVR)',
-                                    'XGBoost',
-                                    'LightGBM'
-                                    ]
-
-                    selected_models = st.multiselect('Select Regression Models', models_list)
-
-                    if selected_models:
-                        # Initialize RegressionModels class
-                        models = RegressionModels()
-                        
-                        # Add data
-                        models.add_data(X, y)
-                        
-                        # Split data into training and testing sets
-                        models.split_data()
-
-                        # Train and evaluate selected models
-                        for model_name in selected_models:
-                            st.subheader(f"Model: {model_name}")
-                            models.fit(model_name)
-                            y_pred = models.train(model_name)
-                            mse, r2 = models.evaluate(model_name)
-                            st.write(f"MSE: {mse}")
-                            st.write(f"R-squared: {r2}")
-
-def NLP():
-    Gemini_Chat,Gemini_Vision, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision','Bert'])
-
-    with Gemini_Chat:
-            st.title("Chat with Gemini Pro")
-            gemini_model()
-
-    with Gemini_Vision:
-        #initialize our streamlit app
-        #st.set_page_config(page_title="Gemini Image Demo")
-        st.header("Gemini Application")
-        input=st.text_input("Input Prompt: ",key="input_prompt")
-        uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
-        image=""  
-
-        if uploaded_file is not None:
-            image = Image.open(uploaded_file)
-            #image = Image.open(io.BytesIO(uploaded_file.read()))
-
-            st.image(image, caption="Uploaded Image.", use_column_width=True) 
-       
-        submit=st.button("Tell me about the image")
-        ## If ask button is clicked
-        if submit:
-            response=get_gemini_response_vision(input,image)
-            st.subheader("The Response is")
-            st.write(response)
-
-    with Bert:
-            st.title(" Bert model will available soon")
-
-def Voice():
-    st.title("Home Page")
-    st.write("Welcome to the Home Page")
-
-def Video():
-    st.title("Home Page")
-    st.write("Welcome to the Home Page")
-
-def LLMs():
-    st.title("About Page")
-    st.write("This is the About Page")
-
-def AI():
-    st.title("Need to add models")
-    #st.write("This is the About AI")
-
-def resume():
-    st.title("Resume")
-    st.write("")
-    About, Work_Experience,Skills_Tools, Education_Certification = st.tabs(["About", "Work Experience","Skills & Tools", "Education & Certificates"])
-
-    with About:
-        Resume().display_information()
-    
-    with Work_Experience:
-        Resume().display_work_experience()
-
-    with Skills_Tools:
-        Resume().skills_tools()
-    
-    with Education_Certification:
-        Resume().display_education_certificate()
-
-
-
-# Main function to run the app
-def main():
-
-    st.sidebar.title("Deep Learning/ Data Science/ AI Models")
-    # page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
-    page_options = ["NLP","AI","Classification", "Regressor","Deep Learning", "Resume"]
-    choice = st.sidebar.radio("Select", page_options)
-
-    if choice == "Classification":
+def classification():
         train, test = st.tabs(['Train','Test'])
 
         with train:
@@ -245,8 +93,8 @@ def main():
                 if option:
                     st.write("**You have selected output column**: ", option)
 
-                    y = spectra_df[option] 
                     X= spectra_df.drop(option, axis=1)
+                    y = spectra_df[option] 
 
                     # Define the columns with your content
                     col1, col2 = st.columns([4,1], gap="small")
@@ -288,10 +136,9 @@ def main():
                     # Execute further code based on selected models
                     if selected_models:
                         # st.write("Selected Models:", selected_models)
-
                         # Toggle to add hyperparameters
                         add_hyperparameters = st.toggle("Add Hyperparameters")
-
+                        
                         # If hyperparameters should be added
                         if add_hyperparameters:
                             num_models = len(selected_models)
@@ -380,7 +227,10 @@ def main():
                                 # for model_name in model_hyperparameters
                                 
                                 if models == "Naive Bayes Classifier":
+                                    # Pipeline to implement model
+
                                     naive_bayes_model = clf.naive_bayes_classifier(model_hyperparameters)
+
                                     naive_bayes_accuracy = clf.evaluate_model(naive_bayes_model)
                                     # naive_bayes_classification_report = clf.evaluate_classification_report(naive_bayes_model)
                                     # st.write("Naive Bayes Accuracy:", naive_bayes_accuracy)
@@ -455,8 +305,8 @@ def main():
 
                 if spectra_1 is not None:
                     spectra_df1 = pd.read_csv(spectra_1)
-                    Actual = spectra_df1['Disease']
-                    spectra_df1 = spectra_df1.drop(columns=['Disease'])
+                   # Actual = spectra_df1['Disease']
+                    #spectra_df1 = spectra_df1.drop(columns=['Disease'])
                     st.write(spectra_df1.head(5))
                     st.divider()
 
@@ -474,42 +324,41 @@ def main():
                     if max_key == "Naive Bayes Classifier":
                         # naive_bayes_model = clf.naive_bayes_classifier(model_hyperparameters)
                         naive_bayes_model =naive_bayes_model.predict()
-                        st.write("Naive Bayes Model:", naive_bayes_model)
+                        X['Predict'] = naive_bayes_model
+                        st.write("Output : ", X)
+                        st.write("Model used for Prediction is: Naive Bayes Model", naive_bayes_model)
                     
                     if max_key == "Logistic Regression":
-                        st.write("Logistic Regression Model  Hyperparameter:", model_hyperparameters)
                         logistic_regression_model_ = logistic_regression_model.predict(X)
-
                         X['Predict'] = logistic_regression_model_
-                        X['Actual'] = Actual
                         st.write("Output : ", X)
-
-                        logistic_regression_accuracy = clf.evaluate_model(logistic_regression_model)
-                        # logistic_regression_classification_report = clf.evaluate_classification_report(logistic_regression_model)
-                        st.write("Logistic Regression Accuracy:", logistic_regression_accuracy)
-                        # accuracy_dict[models] = logistic_regression_accuracy
+                        st.write("Model used for Prediction is: Logistic Regression")
 
                     if max_key == "Decision Tree":
                         decision_tree_model_ = decision_tree_model.predict(X)
                         X['Predict'] = decision_tree_model_
-                        X['Actual'] = Actual
-                        st.write("Output : ", X)
+                        #X['Actual'] = Actual
+                        st.write("Model used for Prediction is: Decision Tree ", X)
                     
                     if max_key == "Random Forests":
                         random_forests_model = random_forests_model.predict(X)
-                        st.write("Random Forests Model:", random_forests_model)
+                        X['Predict'] = random_forests_model
+                        st.write("Model used for Prediction is: Random Forests Model:\n Predictions are:", random_forests_model)
                     
                     if max_key == "SVM":
                         svm_model = svm_model.predict(X)
-                        st.write("Support Vector Machines Model:", svm_model)
+                        X['Predict'] = random_forests_model
+                        st.write("Model used for Prediction is: Support Vector Machines Model:", svm_model)
                     
                     if max_key == "KNN":
                         knn_model = knn_model.predict(X)
-                        st.write("K-Nearest Neighbors Model:", knn_model)
+                        X['Predict'] = random_forests_model
+                        st.write("Model used for Prediction is: K-Nearest Neighbors Model:", knn_model)
                     
                     if max_key == "K- Means Clustering":
                         kmeans_model =kmeans_model.predict(X)
-                        st.write("K-Means Clustering Model:", kmeans_model)
+                        X['Predict'] = random_forests_model
+                        st.write("Model used for Prediction is: K-Means Clustering Model:", kmeans_model)
 
                     st.divider()
 
@@ -517,28 +366,178 @@ def main():
                     st.download_button(
                         label="Download data as CSV",
                         data=data_frame,
-                        file_name='large_df.csv',
+                        file_name='classifier_tagging_df.csv',
                         mime='text/csv',
                     )
 
                     st.divider()
 
+
+def regressor():
+    EDA, train, test = st.tabs(['Train','Test'])
+
+    with train:
+            st.title("Regression / Train data")
+            spectra = st.file_uploader("**Upload file**", type={"csv", "txt"})
+            
+            if spectra is not None:
+                spectra_df = pd.read_csv(spectra)
+                
+                st.write(spectra_df.head(5))
+                # st.write("Headers", spectra_df.columns.tolist())
+                st.write("**Total Rows**", spectra_df.shape[0])
+
+                st.divider()
+
+                option = st.text_input("**Select Output Column**:")
+                st.divider()
+
+                if option:
+                    st.write("**You have selected output column**: ", option)
+
+                    y = spectra_df[option] 
+                    X= spectra_df.drop(option, axis=1)
+
+                                        # Define the columns with your content
+                    col1, col2 = st.columns([4,1], gap="small")
+
+                    # Add content to col1
+                    with col1:
+                        st.write("Train data excluding output")
+                        st.write(X.head(5))
+
+                    # Add content to col2
+                    with col2:
+                        st.write("Output")
+                        st.write(y.head(5))
+
+                    st.divider()
+
+                    # Select models
+                    # models_list = [
+                    #     'Linear Regression', 'Polynomial Regression', 'Ridge Regression',
+                    #     'Lasso Regression', 'ElasticNet Regression', 'Logistic Regression',
+                    #     'Decision Tree Regression', 'Random Forest Regression',
+                    #     'Gradient Boosting Regression', 'Support Vector Regression (SVR)',
+                    #     'XGBoost', 'LightGBM'
+                    # ]
+
+                    models_list = [
+                                   'Linear Regression',
+                                    'Polynomial Regression',
+                                    'Ridge Regression',
+                                    'Lasso Regression',
+                                    'ElasticNet Regression',
+                                    'Logistic Regression',
+                                    'Decision Tree Regression',
+                                    'Random Forest Regression',
+                                    'Gradient Boosting Regression',
+                                    'Support Vector Regression (SVR)',
+                                    'XGBoost',
+                                    'LightGBM'
+                                    ]
+
+                    selected_models = st.multiselect('Select Regression Models', models_list)
+
+                    if selected_models:
+                        # Initialize RegressionModels class
+                        models = RegressionModels()
+                        
+                        # Add data
+                        models.add_data(X, y)
+                        
+                        # Split data into training and testing sets
+                        models.split_data()
+
+                        # Train and evaluate selected models
+                        for model_name in selected_models:
+                            st.subheader(f"Model: {model_name}")
+                            models.fit(model_name)
+                            y_pred = models.train(model_name)
+                            mse, r2 = models.evaluate(model_name)
+                            st.write(f"MSE: {mse}")
+                            st.write(f"R-squared: {r2}")
+
+
+def NLP():
+    Gemini_Chat,Gemini_Vision,Gemini_PDF, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision',"Gemini-PDF Chat",'ChatBot'])
+
+    with Gemini_Chat:
+            st.title("Chat with Gemini Pro")
+            st.write("Note: ask basic question from LLMs")
+            gemini_model()
+
+    with Gemini_Vision:
+
+        st.header("Chat with Image using Gemini ")
+        st.write("Note: upload single image and ask question related to Image, and Input the relative prompt to ask question:")
+        input=st.text_input("Input Prompt: ",key="input_prompt")
+        uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+        image=""  
+
+        if uploaded_file is not None:
+            image = Image.open(uploaded_file)
+            #image = Image.open(io.BytesIO(uploaded_file.read()))
+
+            st.image(image, caption="Uploaded Image.", use_column_width=True) 
+       
+        submit=st.button("Tell me about the image")
+        ## If ask button is clicked
+        if submit:
+            response=get_gemini_response_vision(input,image)
+            st.subheader("The Response is")
+            st.write(response)
+
+    with Gemini_PDF:
+        st.title(" Working on the model, will add soon.")
+
+    with Bert:
+            st.title(" Working on the model, will add soon.")
+
+
+def deep_learning():
+    st.title("Deep Learning Models")
+    st.write("Needs to add projects of deep learning")
+
+
+def resume():
+    st.title("Resume")
+    st.write("")
+    About, Work_Experience,Skills_Tools, Education_Certification = st.tabs(["About", "Work Experience","Skills & Tools", "Education & Certificates"])
+
+    with About:
+        Resume().display_information()
+    
+    with Work_Experience:
+        Resume().display_work_experience()
+
+    with Skills_Tools:
+        Resume().skills_tools()
+    
+    with Education_Certification:
+        Resume().display_education_certificate()
+
+
+
+# Main function to run the app
+def main():
+
+    st.sidebar.title("Deep Learning/ Data Science/ AI Models")
+    # page_options = ["Classification", "Regressor", "NLP", "Image", "Voice", "Video", "LLMs"]
+    page_options = ["Chatbot & NLP" ,"Classification", "Regressor","Deep Learning", "Resume"]
+    choice = st.sidebar.radio("Select", page_options)
+
+    if choice == "Classification":
+        classification()
+
     elif choice == "Regressor":
         regressor()
-    elif choice == "NLP":
+    elif choice == "Chatbot & NLP":
         NLP()
 
-    if choice == "Image":
-        Image() 
-    
-    if choice == "Voice":
-        Voice()
+    if choice == "Deep Learning": 
+        deep_learning()
 
-    if choice == "AI":
-        AI()
-    
-    if choice == "LLMs": 
-        LLMs()
     if choice == 'Resume':
         resume()
 
