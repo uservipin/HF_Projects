@@ -1,11 +1,14 @@
 from classification import ClassificationModels
 from regression import RegressionModels 
 from resume import Resume
-
+'''
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder, StandardScaler
+
+'''
+
 
 
 import pandas as pd
@@ -343,7 +346,7 @@ def classification():
                     if max_key == "Random Forests":
                         random_forests_model = random_forests_model.predict(X)
                         X['Predict'] = random_forests_model
-                        st.write("Model used for Prediction is: Random Forests Model:\n Predictions are:", random_forests_model)
+                        st.write("Model used for Prediction is: Random Forests Model:", random_forests_model)
                     
                     if max_key == "SVM":
                         svm_model = svm_model.predict(X)
@@ -374,7 +377,7 @@ def classification():
 
 
 def regressor():
-    EDA, train, test = st.tabs(['Train','Test'])
+    train, test = st.tabs(['Train','Test'])
 
     with train:
             st.title("Regression / Train data")
