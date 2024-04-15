@@ -1,15 +1,11 @@
 from classification import ClassificationModels
 from regression import RegressionModels 
 from resume import Resume
-'''
+
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder, LabelEncoder, StandardScaler
-
-'''
-
-
 
 import pandas as pd
 import warnings
@@ -312,16 +308,6 @@ def classification():
                     #spectra_df1 = spectra_df1.drop(columns=['Disease'])
                     st.write(spectra_df1.head(5))
                     st.divider()
-
-                    model_dict ={
-                                "Naive Bayes Classifier":'GaussianNB()',
-                                "Logistic Regression":'LogisticRegression()',
-                                "Decision Tree":'DecisionTreeClassifier()',
-                                "Random Forests":'RandomForestClassifier()',
-                                "SVM":'SVC()',
-                                "KNN":'KNeighborsClassifier()',
-                                "K- Means Clustering":'KMeans()'
-                                }
                     
                     X= spectra_df1
                     if max_key == "Naive Bayes Classifier":
@@ -453,14 +439,57 @@ def regressor():
                         models.split_data()
 
                         # Train and evaluate selected models
+                        best_model = None
+                        best_metric = float('inf')  # Initialize with a high value for MSE (lower is better)
                         for model_name in selected_models:
-                            st.subheader(f"Model: {model_name}")
+                            # st.subheader(f"Model: {model_name}")
                             models.fit(model_name)
                             y_pred = models.train(model_name)
                             mse, r2 = models.evaluate(model_name)
-                            st.write(f"MSE: {mse}")
-                            st.write(f"R-squared: {r2}")
+                            # st.write(f"MSE: {mse}")
+                            # st.write(f"R-squared: {r2}")
+                            
+                            # Update best model based on MSE
+                            if r2 < best_metric:
+                                best_model = model_name
+                                best_metric = r2
 
+
+                        # Perform testing based on the best model
+                        if best_model:
+                            st.subheader(f"Best Model: {best_model}")
+                            test_mse, test_r2 = models.evaluate(best_model)
+                            st.write(f"Test MSE: {test_mse}")
+                            st.write(f"Test R-squared: {test_r2}")
+                            # You can also visualize the predictions vs. true values, residual plots, etc. here
+                        else:
+                            st.write("No best model selected.")                                
+
+
+
+    with test:
+        st.title("Regression / Test")       
+        spectra_1 = st.file_uploader("Upload file test the model", type={"csv", "txt"})
+        if spectra_1 is not None:
+            spectra_df1 = pd.read_csv(spectra_1)
+            st.write(spectra_df1.head(5))
+            st.divider()
+            st.write("models",models)
+            # models = RegressionModels()
+            if best_model:
+                # st.subheader(f"Best Model: {best_model}")
+                st.write("best model", best_model)
+                y_pred= models.predict(model_name = best_model,X = spectra_df1)
+                # st.write(f"Test MSE: {test_mse}")
+                st.write(f"Y pred is : {max(y_pred)}")
+                # You can also visualize the predictions vs. true values, residual plots, etc. here
+            else:
+                st.write("No best model selected.")
+
+
+
+
+        
 
 def NLP():
     Gemini_Chat,Gemini_Vision,Gemini_PDF, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision',"Gemini-PDF Chat",'ChatBot'])
