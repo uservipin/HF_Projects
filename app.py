@@ -27,7 +27,6 @@ warnings.filterwarnings("ignore")
 
 
 load_dotenv()  # take environment variables from .env.
-os.getenv("GOOGLE_API_KEY")
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
 
@@ -487,12 +486,8 @@ def regressor():
                 st.write("No best model selected.")
 
 
-
-
-        
-
 def NLP():
-    Gemini_Chat,Gemini_Vision,Gemini_PDF, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision',"Gemini-PDF Chat",'ChatBot'])
+    Gemini_Chat,Gemini_Vision,Gemini_PDF, OpenAiDocChat, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision',"Gemini-PDF Chat","OpenAi Docs Chat",'ChatBot'])
 
     with Gemini_Chat:
             st.title("Chat with Gemini Pro")
@@ -523,6 +518,8 @@ def NLP():
     with Gemini_PDF:
         st.title(" Working on the model, will add soon.")
 
+    with OpenAiDocChat:
+        st.title("Working on the model")
     with Bert:
             st.title(" Working on the model, will add soon.")
 
@@ -548,8 +545,6 @@ def resume():
     
     with Education_Certification:
         Resume().display_education_certificate()
-
-
 
 # Main function to run the app
 def main():

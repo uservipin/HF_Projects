@@ -3,66 +3,12 @@ import streamlit as st
 
 
 class Resume:
-        
-    def skills_tools(self):
-        st.header("Tools and Skills :")
-
-        with st.expander("**Machine Learning**"):
-            ML = ["SK-Learn",
-                "Random Forest",
-                "Decision Tree",
-                "Ensemble Learning Bagging",
-                "Boosting",
-                "AUC/ROC",
-                "EDA",
-                "Clustering",
-                "NLP",
-                "Pipelines",
-                "PCA" ]
-            
-            # Create bullet point list using HTML unordered list (<ul>) and list items (<li>)
-            bullet_points = f"<ul style='list-style-type: disc; padding-left: 15px;'>"  \
-                        + "".join([f"<li>{item}</li>" for item in ML]) + "</ul>"
-            st.write(bullet_points, unsafe_allow_html=True)
-                
-        with st.expander("**Deep Learning**"):
-            DL = ["BERT",
-                "TensorFlow",
-                "Transformers",
-                "Encoders Decoders"]
-            # Create bullet point list using HTML unordered list (<ul>) and list items (<li>)
-            bullet_points = f"<ul style='list-style-type: disc; padding-left: 15px;'>"  \
-                        + "".join([f"<li>{item}</li>" for item in DL]) + "</ul>"
-            st.write(bullet_points, unsafe_allow_html=True)
-            
-
-        with st.expander("**Data Analytics**"):
-            DA = ["Python (pandas, scikit-learn, LightGBM, matplotlib, PyTorch)",
-                "SQL",
-                "Power BI:(Power Query, Power Service, DAX)"
-                ]
-            # Create bullet point list using HTML unordered list (<ul>) and list items (<li>)
-            bullet_points = f"<ul style='list-style-type: disc; padding-left: 15px;'>"  \
-                        + "".join([f"<li>{item}</li>" for item in DA]) + "</ul>"
-            st.write(bullet_points, unsafe_allow_html=True)
-
-        with st.expander("**Cloud**"):
-            DA = ["- Data factory"
-                "     - Basics",
-                "     - ETL",
-                "     - Pipeline",
-                " - Azure Machine Learning Studio",
-                "     - Train and test",
-                "     - Data Preprocessing",
-                "     - Run Experiments",
-                "     - Auto ML",
-                "     - Data Bricks (Basic)"
-                ]
-            st.markdown("\n".join(DA))
-
+  
     def display_information(self):
         st.header("About: ")
-        st.write("Data Science professional with over 3+ years of hands-on experience specializing in data analysis, data visualization, and the development and implementation of Data Science/Machine Learning/AI models.Currently, dedicated to the role of a Fraud detection Data Scientist, leveraging advanced statistical and ML, AI techniques.")
+        st.write("**Current Organization**:Teleperformance Digital (Sep/2023- Working)| **Benori** (Oct/2021-Sep/2023) | **Strolar** \
+                (Jan/2019-Sep/2020)")
+        st.write( "A data science professional with over 3 years of experience, currently working at Teleperformance Digital. Specializing in Generative AI, machine learning, NLP, and data analytics using tools like Python, SQL, and Power BI. Strong background in developing predictive models, fraud detection systems, and customer service dashboards, with expertise in enhancing customer experience through advanced data science techniques.")
         st.write("")
         st.write("----------------------------")
         st.write("LinkedIn [link](https://www.linkedin.com/in/vipin-/)")
@@ -70,6 +16,7 @@ class Resume:
         st.write("Web Project Source Code [link](https://github.com/uservipin/HF_Projects)")
         st.write("Data Science Projects [link](https://github.com/uservipin/data_science)")
         st.write("Python Projects [link](https://github.com/uservipin/python)")
+   
     def display_work_experience(self):
         st.header("Work Experience")
         with st.expander("**Enhancing Customer Experience and Operational Efficiency through NLP Techniques**"):
@@ -140,6 +87,64 @@ class Resume:
                     + "".join([f"<li>{item}</li>" for item in cr_pro_pointers]) + "</ul>"
             st.write(bullet_points, unsafe_allow_html=True)
 
+      
+    def skills_tools(self):
+        st.header("Tools and Skills :")
+
+        with st.expander("**Machine Learning**"):
+            ML = ["SK-Learn",
+                "Random Forest",
+                "Decision Tree",
+                "Ensemble Learning Bagging",
+                "Boosting",
+                "AUC/ROC",
+                "EDA",
+                "Clustering",
+                "NLP",
+                "Pipelines",
+                "PCA" ]
+            
+            # Create bullet point list using HTML unordered list (<ul>) and list items (<li>)
+            bullet_points = f"<ul style='list-style-type: disc; padding-left: 15px;'>"  \
+                        + "".join([f"<li>{item}</li>" for item in ML]) + "</ul>"
+            st.write(bullet_points, unsafe_allow_html=True)
+                
+        with st.expander("**Deep Learning**"):
+            DL = ["BERT",
+                "TensorFlow",
+                "Transformers",
+                "Encoders Decoders"]
+            # Create bullet point list using HTML unordered list (<ul>) and list items (<li>)
+            bullet_points = f"<ul style='list-style-type: disc; padding-left: 15px;'>"  \
+                        + "".join([f"<li>{item}</li>" for item in DL]) + "</ul>"
+            st.write(bullet_points, unsafe_allow_html=True)
+            
+
+        with st.expander("**Data Analytics**"):
+            DA = ["Python (pandas, Scikit-Learn)",
+                "SQL",
+                "Power BI:(Power Query, Power Bi Service, DAX)"
+                ]
+            # Create bullet point list using HTML unordered list (<ul>) and list items (<li>)
+            bullet_points = f"<ul style='list-style-type: disc; padding-left: 15px;'>"  \
+                        + "".join([f"<li>{item}</li>" for item in DA]) + "</ul>"
+            st.write(bullet_points, unsafe_allow_html=True)
+
+        with st.expander("**Cloud**"):
+            DA = ["- Data factory"
+                "     - Basics",
+                "     - ETL",
+                "     - Pipeline",
+                " - Azure Machine Learning Studio",
+                "     - Train and test",
+                "     - Data Preprocessing",
+                "     - Run Experiments",
+                "     - Auto ML",
+                "     - Data Bricks (Basic)"
+                ]
+            st.markdown("\n".join(DA))
+
+
     def display_education_certificate(self):
         st.header("Education and Certificate:")
 
@@ -147,7 +152,11 @@ class Resume:
             Cer = ["Deep Learning – Andrew NG",
                 "Data Analytics – Google",
                 "SQL – Online",
-                "Data Science/ Deep learning – CampusX"
+                "Data Science/ Deep learning – CampusX",
+                "Large Language Models with Semantic Search",
+                "Preprocessing Unstructured Data for LLM Applications",
+                "Building Applications with Vector Databases"
+
             ]
             # Create bullet point list using HTML unordered list (<ul>) and list items (<li>)
             bullet_points = f"<ul style='list-style-type: disc; padding-left: 15px;'>"  \
