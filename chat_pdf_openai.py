@@ -6,7 +6,6 @@ from langchain_openai import OpenAIEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 import streamlit as st
-from PyPDF2 import PdfReader
 import tempfile
 
 class chatpdf:
