@@ -17,5 +17,3 @@ langchain-community
 langchain-openai
 langsmith
 openai
-PyPDF2
-python-dotenv
