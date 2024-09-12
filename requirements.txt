@@ -7,12 +7,9 @@ xgboost==2.0.3
 google.generativeai
 python-dotenv
 langchain
-PyPDF2
-chromadb
-langchain_google_genai
-keras
 langchain-chroma
 langchain-community
 langchain-openai
-langsmith
+langchain-core
 openai
+langchain-text-splitters
