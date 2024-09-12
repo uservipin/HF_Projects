@@ -11,3 +11,11 @@ PyPDF2
 chromadb
 faiss-cpu
 langchain_google_genai
+keras
+langchain-chroma
+langchain-community
+langchain-openai
+langsmith
+openai
+PyPDF2
+python-dotenv

@@ -1,6 +1,7 @@
 from classification import ClassificationModels
 from regression import RegressionModels 
 from resume import Resume
+from chat_pdf_openai import chatpdf
 
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
@@ -487,7 +488,7 @@ def regressor():
 
 
 def NLP():
-    Gemini_Chat,Gemini_Vision,Gemini_PDF, OpenAiDocChat, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision',"Gemini-PDF Chat","OpenAi Docs Chat",'ChatBot'])
+    Gemini_Chat,Gemini_Vision, OpenAiDocChat, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision',"OpenAi Docs Chat",'ChatBot'])
 
     with Gemini_Chat:
             st.title("Chat with Gemini Pro")
@@ -515,12 +516,15 @@ def NLP():
             st.subheader("The Response is")
             st.write(response)
 
-    with Gemini_PDF:
-        st.title(" Working on the model, will add soon.")
+    # with Gemini_PDF:
+    #     st.title(" Working on the model, will add soon.")
 
     with OpenAiDocChat:
-        st.title("Working on the model")
-    with Bert:
+        gpt_model = "gpt-3.5-turbo"
+        st.title("Document Question-Answering App")
+        chatpdf().qa_pdf(gpt_model)
+
+    with Bert:     
             st.title(" Working on the model, will add soon.")
 
 
