@@ -520,9 +520,17 @@ def NLP():
     #     st.title(" Working on the model, will add soon.")
 
     with OpenAiDocChat:
+   
         gpt_model = "gpt-3.5-turbo"
         st.title("Document Question-Answering App")
-        chatpdf().qa_pdf(gpt_model)
+        password = st.text_input("Enter a password", type="password")
+        if 'asdfghjkl' == password:
+            # st.write("Login success")
+            chatpdf().qa_pdf(gpt_model)
+
+        else:
+            st.write("Please enter correct password")
+        
 
     with Bert:     
             st.title(" Working on the model, will add soon.")
