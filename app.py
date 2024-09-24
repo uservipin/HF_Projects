@@ -523,13 +523,28 @@ def NLP():
    
         gpt_model = "gpt-3.5-turbo"
         st.title("Document Question-Answering App")
-        password = st.text_input("Enter a password", type="password")
-        if 'asdfghjkl' == password:
-            # st.write("Login success")
-            chatpdf().qa_pdf(gpt_model)
+        st.warning("This application is for test purposes only and can be used in a limited capacity. Please note that API requests to OpenAI are chargeable. Password : asdfghjkl")
 
-        else:
-            st.write("Please enter correct password")
+
+        if 'password_verified' not in st.session_state:
+            st.session_state['password_verified'] = False
+
+        # If the password is not verified, show the input field
+        if not st.session_state['password_verified']:
+
+            password = st.text_input("Enter a password", type="password")
+
+            # Verify password and update session state
+            if password == 'asdfghjkl':
+                st.session_state['password_verified'] = True
+                st.success("Login successful")
+            elif password:
+                st.error("Incorrect password. Please try again.")
+
+        # If the password is verified, hide the password input field and show the main app
+        if st.session_state['password_verified']:
+            chatpdf().qa_pdf(gpt_model)
+     
         
 
     with Bert:     
