@@ -7,7 +7,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 import streamlit as st
 import tempfile
-Chroma.api.client.SharedSystemClient.clear_system_cache()
 
 
 class chatpdf:
@@ -35,8 +34,8 @@ class chatpdf:
                 llm = ChatOpenAI(model=gpt_model)
                 text_splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
                 splits = text_splitter.split_documents(docs)
-                vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())
-                retriever = vectorstore.as_retriever()
+                # vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())
+                # retriever = vectorstore.as_retriever()
 
                 if question:
                 # Load the QA chain
