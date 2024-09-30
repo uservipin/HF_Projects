@@ -14,3 +14,4 @@ langchain-core
 openai
 langchain-text-splitters
 PyPDF2
+pypdf
