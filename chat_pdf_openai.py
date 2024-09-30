@@ -7,6 +7,8 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain.chains.question_answering import load_qa_chain
 import streamlit as st
 import tempfile
+Chroma.api.client.SharedSystemClient.clear_system_cache()
+
 
 class chatpdf:
     
