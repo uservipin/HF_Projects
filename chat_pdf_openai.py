@@ -9,8 +9,6 @@ import streamlit as st
 import tempfile
 
 class chatpdf:
-
-
     
     def qa_pdf(self,gpt_model):
             uploaded_file = st.file_uploader("File upload", type="pdf")
@@ -39,17 +37,11 @@ class chatpdf:
                 retriever = vectorstore.as_retriever()
 
                 if question:
-                    # Load QA Chain with OpenAI (ChatGPT or GPT-4)
                 # Load the QA chain
                     qa_chain = load_qa_chain(llm, chain_type="stuff")  # "stuff" is for concatenating text
-
-                    # # Example question
-                    # question = "What happen on June 10, 1891 "
 
                     # Run the question-answering chain
                     response = qa_chain.run(input_documents=splits, question=question)
 
-                    # Output the answer
                     print("Answer:", response) 
-                    # Display the answer
                     st.write("Answer:", response)
