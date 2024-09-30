@@ -487,19 +487,18 @@ def regressor():
             else:
                 st.write("No best model selected.")
 
-
 def NLP():
     Gemini_Chat,Gemini_Vision, OpenAiDocChat, Bert, = st.tabs(['Gemini-Chat','Gemini-Vision',"OpenAi Docs Chat",'ChatBot'])
 
     with Gemini_Chat:
             st.title("Chat with Gemini Pro")
-            st.write("Note: ask basic question from LLMs")
+            st.warning("Note: Ask basic question from LLMs")
             gemini_model()
 
     with Gemini_Vision:
 
         st.header("Chat with Image using Gemini ")
-        st.write("Note: upload single image and ask question related to Image, and Input the relative prompt to ask question:")
+        st.warning("Note: Upload single image and ask question related to Image, and Input the relative prompt to ask question:")
         input=st.text_input("Input Prompt: ",key="input_prompt")
         uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
         image=""  
@@ -523,8 +522,8 @@ def NLP():
     with OpenAiDocChat:
    
         gpt_model = "gpt-3.5-turbo"
-        st.title("Document Question-Answering App")
-        st.warning("This application is for test purposes only and can be used in a limited capacity. Please note that API requests to OpenAI are chargeable. Password : asdfghjkl")
+        st.title("PDF Document Question-Answering App")
+        st.warning("Note: This application is for test purposes only and can be used in a limited capacity. Please note that API requests to OpenAI are chargeable. Password : asdfghjkl")
 
 
         if 'password_verified' not in st.session_state:
