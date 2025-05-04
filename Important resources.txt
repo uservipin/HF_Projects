@@ -1,0 +1,16 @@
+
+AWS Multimodel Github document: https://github.com/debnsuma/fcc-ai-engineering-aws 
+YOutube - https://www.youtube.com/watch?v=jDFpEnJeSVg&t=73s
+Time series forcasting: https://www.kaggle.com/competitions/store-sales-time-series-forecasting/data?select=train.csv
+Multi-Agent Systems: https://www.youtube.com/watch?v=4oC1ZKa9-Hs
+
+
+Topics Needs to Complete
+
+Multimodel RAG
+Multi Agent
+Drift Search
+Graph RAG - Microsoft 
+Global Search
+Drift Search
+
